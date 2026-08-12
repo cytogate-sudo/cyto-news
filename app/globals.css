@@ -415,6 +415,44 @@ a {
 .article-body p {
   margin: 0 0 22px;
 }
+.article-body ul,
+.article-body ol {
+  margin: 0 0 22px;
+  padding-left: 1.4em;
+}
+.article-body ul {
+  list-style: disc;
+}
+.article-body ol {
+  list-style: decimal;
+}
+.article-body li {
+  margin-bottom: 8px;
+}
+.article-body li::marker {
+  color: var(--bordo);
+}
+.article-body h2,
+.article-body h3 {
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  margin: 34px 0 14px;
+}
+.article-body h2 {
+  font-size: 26px;
+}
+.article-body h3 {
+  font-size: 21px;
+}
+.article-body strong {
+  font-weight: 700;
+}
+.article-body a {
+  color: var(--bordo);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
 .article-body > p:first-of-type::first-letter {
   font-family: var(--font-display), serif;
   font-weight: 900;

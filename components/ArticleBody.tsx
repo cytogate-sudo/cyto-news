@@ -1,11 +1,12 @@
 import { Fragment } from "react";
+import ReactMarkdown from "react-markdown";
 import { PullQuote } from "@/components/PullQuote";
 import { TermBox, type Term } from "@/components/TermBox";
 
-// Makale metni boş satırlarla ayrılmış paragraflardan oluşur. Pull-quote ve
-// terim kutusu, mockup'taki editorial düzene benzer şekilde metnin ortasına
-// yerleştirilir. İçerik gerçek Sayı 1 metinleriyle doldurulurken (Faz 4)
-// zengin metin/markdown ihtiyacı çıkarsa bu bileşen genişletilebilir.
+// Makale metni boş satırlarla ayrılmış bloklardan oluşur (paragraf, ##
+// alt başlık, veya bir madde listesi). Her blok react-markdown ile render
+// edilir (kalın/italik/liste/başlık desteği), pull-quote ve terim kutusu
+// mockup'taki editorial düzene benzer şekilde metnin ortasına yerleştirilir.
 export function ArticleBody({
   content,
   pullQuote,
@@ -15,19 +16,19 @@ export function ArticleBody({
   pullQuote?: string | null;
   terms?: Term[] | null;
 }) {
-  const paragraphs = content
+  const blocks = content
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean);
 
-  const quoteAfter = pullQuote ? Math.max(1, Math.floor(paragraphs.length / 2) - 1) : -1;
+  const quoteAfter = pullQuote ? Math.max(1, Math.floor(blocks.length / 2) - 1) : -1;
   const termsAfter = terms && terms.length > 0 ? quoteAfter + 1 : -1;
 
   return (
     <div className="article-body">
-      {paragraphs.map((paragraph, index) => (
+      {blocks.map((block, index) => (
         <Fragment key={index}>
-          <p>{paragraph}</p>
+          <ReactMarkdown>{block}</ReactMarkdown>
           {index === quoteAfter && pullQuote ? <PullQuote>{pullQuote}</PullQuote> : null}
           {index === termsAfter && terms ? <TermBox terms={terms} /> : null}
         </Fragment>

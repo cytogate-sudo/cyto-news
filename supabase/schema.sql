@@ -42,13 +42,18 @@ create table if not exists articles (
   unique (issue_id, slug)
 );
 
--- Başlangıç kategori seti — mockup'tan esinlenilmiş, Sayı 1 içeriği girilirken
--- kesinleşecek (bkz. plan ⚠️ notu). Dilediğiniz zaman ekleyip çıkarabilirsiniz.
+-- Kategori seti — Ali'nin paylaştığı gerçek Sayı 1 içeriğinden (GAZETE.pdf)
+-- türetildi, kesinleşmiş sette artık ⚠️ yok.
 insert into categories (slug, name, sort_order) values
   ('nobel-haberleri', 'Nobel Haberleri', 1),
-  ('roportajlar', 'Röportajlar', 2),
-  ('tartisma-kosesi', 'Tartışma Köşesi', 3),
-  ('takimlar', 'Takımlar', 4)
+  ('bilim-haberleri', 'Bilim Haberleri', 2),
+  ('nadir-hastaliklar-kosesi', 'Nadir Hastalıklar Köşesi', 3),
+  ('organizma-kosesi', 'Organizma Köşesi', 4),
+  ('beyin-bilisim', 'Beyin & Bilişim', 5),
+  ('roportajlar', 'Röportajlar', 6),
+  ('tartisma-kosesi', 'Tartışma Köşesi', 7),
+  ('takimlar', 'Takımlar', 8),
+  ('etkinliklerimiz', 'Etkinliklerimiz', 9)
 on conflict (slug) do nothing;
 
 -- Row Level Security: herkes yayınlanmış içeriği okuyabilir, yazma işlemleri
