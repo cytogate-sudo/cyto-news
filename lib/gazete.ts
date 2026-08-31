@@ -32,6 +32,10 @@ export type Article = {
   terms: { term: string; definition: string }[] | null;
   author_name: string | null;
   cover_image_url: string | null;
+  // Admin migration'ı uygulanmadan önce bu iki alan sorgudan gelmeyebilir;
+  // coverAspectRatio/coverObjectPosition yardımcıları undefined'ı da kabul eder.
+  cover_position?: string;
+  cover_aspect?: string;
   is_featured: boolean;
   reading_minutes: number | null;
   status: "draft" | "published";
@@ -41,8 +45,34 @@ export type Article = {
   issue?: Pick<Issue, "issue_number" | "title" | "publish_date">;
 };
 
-const ARTICLE_SUMMARY_COLUMNS =
-  "id, issue_id, category_id, kicker, title, slug, summary, content, pull_quote, terms, author_name, cover_image_url, is_featured, reading_minutes, status, published_at, sort_order, category:categories(slug, name)";
+// Tüm sütunlar + kategori join'i. Bilerek "*" kullanılıyor: admin migration'ı
+// (cover_position/cover_aspect) uygulanmadan önce de sonra da aynı kod çalışır.
+const ARTICLE_SUMMARY_COLUMNS = "*, category:categories(slug, name)";
+
+// Panelden seçilen kapak oranı/konumu → CSS değerleri
+export function coverAspectRatio(aspect: string | null | undefined): string {
+  switch (aspect) {
+    case "standard":
+      return "4 / 3";
+    case "square":
+      return "1 / 1";
+    case "tall":
+      return "3 / 4";
+    default:
+      return "16 / 9";
+  }
+}
+
+export function coverObjectPosition(position: string | null | undefined): string {
+  switch (position) {
+    case "top":
+      return "center top";
+    case "bottom":
+      return "center bottom";
+    default:
+      return "center";
+  }
+}
 
 export async function getCategories(): Promise<Category[]> {
   const supabase = createSupabaseServerClient();

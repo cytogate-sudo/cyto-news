@@ -4,6 +4,7 @@ import { Masthead } from "@/components/Masthead";
 import { LeadStory } from "@/components/LeadStory";
 import { ArticleCard } from "@/components/ArticleCard";
 import { getIssueByNumber, getArticlesByIssueId } from "@/lib/gazete";
+import { getSiteSettings } from "@/lib/settings";
 
 export const revalidate = 3600;
 
@@ -25,13 +26,16 @@ export default async function IssuePage({ params }: { params: Promise<Params> })
   const issue = await getIssueByNumber(issueNumber);
   if (!issue) notFound();
 
-  const articles = await getArticlesByIssueId(issue.id);
+  const [articles, settings] = await Promise.all([
+    getArticlesByIssueId(issue.id),
+    getSiteSettings(),
+  ]);
   const featured = articles.find((a) => a.is_featured) ?? articles[0] ?? null;
   const rest = articles.filter((a) => a.id !== featured?.id);
 
   return (
     <>
-      <Masthead issue={issue} />
+      <Masthead issue={issue} masthead={settings.masthead} />
       <hr className="hairline-thick" />
 
       {featured ? <LeadStory article={featured} issueNumber={issue.issue_number} /> : null}

@@ -3,17 +3,18 @@ import { Masthead } from "@/components/Masthead";
 import { LeadStory } from "@/components/LeadStory";
 import { ArticleCard } from "@/components/ArticleCard";
 import { getLatestIssue, getArticlesByIssueId } from "@/lib/gazete";
+import { getSiteSettings } from "@/lib/settings";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const issue = await getLatestIssue();
+  const [issue, settings] = await Promise.all([getLatestIssue(), getSiteSettings()]);
   const articles = issue ? await getArticlesByIssueId(issue.id) : [];
 
   if (!issue) {
     return (
       <>
-        <Masthead issue={null} />
+        <Masthead issue={null} masthead={settings.masthead} />
         <hr className="hairline-thick" />
         <div className="empty-state">
           Henüz yayınlanmış bir sayı yok. İlk sayı yakında burada olacak.
@@ -27,7 +28,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Masthead issue={issue} />
+      <Masthead issue={issue} masthead={settings.masthead} />
       <hr className="hairline-thick" />
 
       {featured ? <LeadStory article={featured} issueNumber={issue.issue_number} /> : null}

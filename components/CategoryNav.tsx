@@ -1,7 +1,14 @@
 import Link from "next/link";
 import type { Category } from "@/lib/gazete";
+import type { MastheadSettings } from "@/lib/settings";
 
-export function CategoryNav({ categories }: { categories: Category[] }) {
+export function CategoryNav({
+  categories,
+  masthead,
+}: {
+  categories: Category[];
+  masthead: MastheadSettings;
+}) {
   return (
     <nav className="util-nav">
       <div className="cats">
@@ -12,12 +19,8 @@ export function CategoryNav({ categories }: { categories: Category[] }) {
         ))}
         <Link href="/hakkinda">Hakkında</Link>
       </div>
-      <a
-        href="https://www.instagram.com/gtucytogate"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        @gtucytogate
+      <a href={masthead.instagram_url} target="_blank" rel="noopener noreferrer">
+        {masthead.instagram_handle}
       </a>
     </nav>
   );

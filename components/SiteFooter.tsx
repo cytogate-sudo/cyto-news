@@ -1,13 +1,13 @@
-export function SiteFooter() {
+import type { MastheadSettings } from "@/lib/settings";
+
+export function SiteFooter({ masthead }: { masthead: MastheadSettings }) {
   return (
     <footer className="site-footer">
-      <span>Cytogate © {new Date().getFullYear()} · Gebze Teknik Üniversitesi</span>
-      <a
-        href="https://www.instagram.com/gtucytogate"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        @gtucytogate
+      <span>
+        {masthead.footer_text} © {new Date().getFullYear()}
+      </span>
+      <a href={masthead.instagram_url} target="_blank" rel="noopener noreferrer">
+        {masthead.instagram_handle}
       </a>
     </footer>
   );

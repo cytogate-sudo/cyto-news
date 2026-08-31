@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/ArticleBody";
-import { getArticleBySlug } from "@/lib/gazete";
+import { coverAspectRatio, coverObjectPosition, getArticleBySlug } from "@/lib/gazete";
 
 export const revalidate = 3600;
 
@@ -44,13 +44,19 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         ) : null}
       </div>
 
-      <div className="article-hero">
+      <div
+        className="article-hero"
+        style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
+      >
         {article.cover_image_url ? (
           <Image
             src={article.cover_image_url}
             alt={article.title}
             fill
-            style={{ objectFit: "cover" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: coverObjectPosition(article.cover_position),
+            }}
             sizes="760px"
           />
         ) : (

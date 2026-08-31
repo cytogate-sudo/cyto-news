@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getCategories } from "@/lib/gazete";
-import { CategoryNav } from "@/components/CategoryNav";
-import { SiteFooter } from "@/components/SiteFooter";
+import { getSiteSettings, themeCssVariables } from "@/lib/settings";
 
 export const metadata: Metadata = {
   title: "Cytogate — Bilim Gazetesi",
@@ -15,16 +13,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await getCategories();
+  const settings = await getSiteSettings();
 
   return (
     <html lang="tr">
-      <body className="min-h-screen flex flex-col">
-        <CategoryNav categories={categories} />
-        <hr className="hairline" />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
-      </body>
+      <head>
+        {/* Tema renkleri panelden düzenlenebilir; globals.css'teki :root
+            varsayılanlarını veritabanındaki değerlerle ezer. */}
+        <style dangerouslySetInnerHTML={{ __html: themeCssVariables(settings.theme) }} />
+      </head>
+      <body className="min-h-screen flex flex-col">{children}</body>
     </html>
   );
 }

@@ -1,4 +1,5 @@
 import type { Issue } from "@/lib/gazete";
+import type { MastheadSettings } from "@/lib/settings";
 
 function formatIssueDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("tr-TR", {
@@ -7,16 +8,22 @@ function formatIssueDate(dateStr: string) {
   });
 }
 
-export function Masthead({ issue }: { issue: Issue | null }) {
+export function Masthead({
+  issue,
+  masthead,
+}: {
+  issue: Issue | null;
+  masthead: MastheadSettings;
+}) {
   return (
     <div className="masthead">
       <div className="eyebrow-row">
         <span className="dot" />
-        <span className="kicker">Biyoteknolojik Araştırmalar Topluluğu</span>
+        <span className="kicker">{masthead.eyebrow}</span>
         <span className="dot" />
       </div>
-      <h1 className="masthead-title">CYTOGATE</h1>
-      <div className="masthead-sub">Bilim Gazetesi</div>
+      <h1 className="masthead-title">{masthead.title}</h1>
+      <div className="masthead-sub">{masthead.subtitle}</div>
       <div className="masthead-meta">
         {issue ? (
           <>
@@ -26,7 +33,7 @@ export function Masthead({ issue }: { issue: Issue | null }) {
             <span>·</span>
           </>
         ) : null}
-        <span>Gebze Teknik Üniversitesi</span>
+        <span>{masthead.university}</span>
       </div>
     </div>
   );

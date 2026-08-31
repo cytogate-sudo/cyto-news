@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Article, Issue } from "@/lib/gazete";
+import { coverObjectPosition, type Article, type Issue } from "@/lib/gazete";
 
 export function LeadStory({
   article,
@@ -17,7 +17,10 @@ export function LeadStory({
             src={article.cover_image_url}
             alt={article.title}
             fill
-            style={{ objectFit: "cover" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: coverObjectPosition(article.cover_position),
+            }}
             sizes="(max-width: 860px) 100vw, 50vw"
           />
         ) : (
