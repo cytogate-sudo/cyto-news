@@ -9,6 +9,7 @@ export type ThemeSettings = {
   bordo_deep: string;
   gold: string;
   muted: string;
+  team_card: string;
 };
 
 export type MastheadSettings = {
@@ -35,6 +36,7 @@ export const DEFAULT_THEME: ThemeSettings = {
   bordo_deep: "#591e1c",
   gold: "#a9822e",
   muted: "#7a6c55",
+  team_card: "#1f4f4a",
 };
 
 export const THEME_PRESETS: { name: string; theme: ThemeSettings }[] = [
@@ -50,6 +52,7 @@ export const THEME_PRESETS: { name: string; theme: ThemeSettings }[] = [
       bordo_deep: "#b96560",
       gold: "#d4af5e",
       muted: "#9c8f78",
+      team_card: "#2f5f58",
     },
   },
   {
@@ -63,6 +66,7 @@ export const THEME_PRESETS: { name: string; theme: ThemeSettings }[] = [
       bordo_deep: "#153d52",
       gold: "#b08d3e",
       muted: "#5f7382",
+      team_card: "#1b3d52",
     },
   },
   {
@@ -76,6 +80,7 @@ export const THEME_PRESETS: { name: string; theme: ThemeSettings }[] = [
       bordo_deep: "#2c4625",
       gold: "#a9822e",
       muted: "#75805c",
+      team_card: "#2c4625",
     },
   },
 ];
@@ -114,5 +119,5 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export function themeCssVariables(theme: ThemeSettings): string {
-  return `:root{--paper:${theme.paper};--paper-card:${theme.paper_card};--ink:${theme.ink};--ink-soft:${theme.ink_soft};--bordo:${theme.bordo};--bordo-deep:${theme.bordo_deep};--gold:${theme.gold};--muted:${theme.muted};}`;
+  return `:root{--paper:${theme.paper};--paper-card:${theme.paper_card};--ink:${theme.ink};--ink-soft:${theme.ink_soft};--bordo:${theme.bordo};--bordo-deep:${theme.bordo_deep};--gold:${theme.gold};--muted:${theme.muted};--team-card-bg:${theme.team_card};}`;
 }

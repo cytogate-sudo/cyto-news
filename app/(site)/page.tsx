@@ -1,14 +1,17 @@
-import Link from "next/link";
 import { Masthead } from "@/components/Masthead";
 import { LeadStory } from "@/components/LeadStory";
-import { ArticleCard } from "@/components/ArticleCard";
-import { getLatestIssue, getArticlesByIssueId } from "@/lib/gazete";
+import { IssueSections } from "@/components/IssueSections";
+import { getLatestIssue, getArticlesByIssueId, getCategories } from "@/lib/gazete";
 import { getSiteSettings } from "@/lib/settings";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [issue, settings] = await Promise.all([getLatestIssue(), getSiteSettings()]);
+  const [issue, settings, categories] = await Promise.all([
+    getLatestIssue(),
+    getSiteSettings(),
+    getCategories(),
+  ]);
   const articles = issue ? await getArticlesByIssueId(issue.id) : [];
 
   if (!issue) {
@@ -33,30 +36,11 @@ export default async function HomePage() {
 
       {featured ? <LeadStory article={featured} issueNumber={issue.issue_number} /> : null}
 
-      <div className="section-title">
-        <h2>Bu sayıda</h2>
-        <div className="rule" />
-      </div>
-
-      {rest.length > 0 ? (
-        <div className="grid-articles">
-          {rest.map((article) => (
-            <ArticleCard key={article.id} article={article} issueNumber={issue.issue_number} />
-          ))}
-        </div>
-      ) : (
-        <div className="empty-state">Bu sayıda henüz başka makale eklenmedi.</div>
-      )}
-
-      <div className="section-title">
-        <h2>Arşiv</h2>
-        <div className="rule" />
-      </div>
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px 40px" }}>
-        <Link href="/sayilar" className="read-link">
-          Tüm sayıları gör <span className="arrow">→</span>
-        </Link>
-      </div>
+      <IssueSections
+        articles={rest}
+        categories={categories}
+        issueNumber={issue.issue_number}
+      />
     </>
   );
 }

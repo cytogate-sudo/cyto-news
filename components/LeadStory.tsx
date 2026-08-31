@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { coverObjectPosition, type Article, type Issue } from "@/lib/gazete";
+import {
+  coverAspectRatio,
+  coverObjectPosition,
+  type Article,
+  type Issue,
+} from "@/lib/gazete";
 
 export function LeadStory({
   article,
@@ -11,7 +16,10 @@ export function LeadStory({
 }) {
   return (
     <div className="lead-wrap">
-      <div className="lead-media">
+      <div
+        className="lead-media"
+        style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
+      >
         {article.cover_image_url ? (
           <Image
             src={article.cover_image_url}

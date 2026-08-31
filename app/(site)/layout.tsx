@@ -1,6 +1,6 @@
 import { getCategories } from "@/lib/gazete";
 import { getSiteSettings } from "@/lib/settings";
-import { CategoryNav } from "@/components/CategoryNav";
+import { TopBar } from "@/components/TopBar";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export default async function SiteLayout({
@@ -10,10 +10,10 @@ export default async function SiteLayout({
 
   return (
     <>
-      <CategoryNav categories={categories} masthead={settings.masthead} />
+      <TopBar categories={categories} masthead={settings.masthead} />
       <hr className="hairline" />
       <div className="flex-1">{children}</div>
-      <SiteFooter masthead={settings.masthead} />
+      <SiteFooter masthead={settings.masthead} categories={categories} />
     </>
   );
 }

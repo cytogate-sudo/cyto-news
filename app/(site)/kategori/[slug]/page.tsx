@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ArticleRow } from "@/components/ArticleRow";
 import { getArticlesByCategorySlug, getCategories } from "@/lib/gazete";
 
 export const revalidate = 3600;
@@ -23,32 +25,31 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
     getCategories(),
   ]);
   const category = categories.find((c) => c.slug === slug);
+  if (!category) notFound();
 
   return (
-    <>
-      <div className="section-title" style={{ marginTop: 40 }}>
-        <h2>{category?.name ?? "Kategori"}</h2>
-        <div className="rule" />
+    <div className="page-head-wrap">
+      <div className="page-head">
+        <div className="kicker">Köşe</div>
+        <h1>{category.name}</h1>
+        <p className="page-head-meta">
+          {articles.length > 0 ? `${articles.length} yazı` : "Henüz yazı yok"}
+        </p>
       </div>
 
       {articles.length === 0 ? (
-        <div className="empty-state">Bu kategoride henüz yazı yok.</div>
+        <div className="empty-state">Bu köşede henüz yazı yok.</div>
       ) : (
-        <div className="grid-articles">
+        <div className="art-rows">
           {articles.map((article) => (
-            <a
+            <ArticleRow
               key={article.id}
-              href={`/sayi/${article.issue?.issue_number}/${article.slug}`}
-              className="card"
-            >
-              <div className="kicker">{article.kicker ?? category?.name}</div>
-              <h3>{article.title}</h3>
-              {article.summary ? <p>{article.summary}</p> : null}
-              {article.author_name ? <div className="byline">{article.author_name}</div> : null}
-            </a>
+              article={article}
+              issueNumber={article.issue?.issue_number ?? 1}
+            />
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

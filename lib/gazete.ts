@@ -172,10 +172,13 @@ export async function getArticlesByCategorySlug(categorySlug: string): Promise<A
   const supabase = createSupabaseServerClient();
   if (!supabase) return [];
 
+  // Not: ARTICLE_SUMMARY_COLUMNS zaten bir "category" join'i içerdiği için
+  // burada onu kullanmıyoruz — aynı tabloyu iki kez join etmek PostgREST'te
+  // "specified more than once" hatası veriyor.
   const { data, error } = await supabase
     .from("articles")
     .select(
-      `${ARTICLE_SUMMARY_COLUMNS}, issue:issues!inner(issue_number, title, publish_date), category:categories!inner(slug, name)`
+      "*, issue:issues!inner(issue_number, title, publish_date), category:categories!inner(slug, name)"
     )
     .eq("status", "published")
     .eq("category.slug", categorySlug)

@@ -402,6 +402,7 @@ export async function saveThemeAction(formData: FormData): Promise<void> {
     bordo_deep: String(formData.get("bordo_deep")),
     gold: String(formData.get("gold")),
     muted: String(formData.get("muted")),
+    team_card: String(formData.get("team_card")),
   };
   await upsertSetting("theme", theme);
   revalidateSite();

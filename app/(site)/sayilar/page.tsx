@@ -19,26 +19,33 @@ export default async function IssuesPage() {
   const issues = await getAllIssues();
 
   return (
-    <>
-      <div className="section-title" style={{ marginTop: 40 }}>
-        <h2>Sayı Arşivi</h2>
-        <div className="rule" />
+    <div className="page-head-wrap">
+      <div className="page-head">
+        <div className="kicker">Arşiv</div>
+        <h1>Tüm Sayılar</h1>
+        <p className="page-head-meta">
+          {issues.length > 0 ? `${issues.length} sayı` : "Henüz sayı yok"}
+        </p>
       </div>
 
       {issues.length === 0 ? (
         <div className="empty-state">Henüz yayınlanmış bir sayı yok.</div>
       ) : (
-        <div className="grid-articles">
+        <div className="art-rows">
           {issues.map((issue) => (
-            <Link key={issue.id} href={`/sayi/${issue.issue_number}`} className="card">
-              <div className="kicker">Sayı {issue.issue_number}</div>
-              <h3>{issue.title}</h3>
-              {issue.description ? <p>{issue.description}</p> : null}
-              <div className="byline">{formatIssueDate(issue.publish_date)}</div>
+            <Link key={issue.id} href={`/sayi/${issue.issue_number}`} className="art-row">
+              <div className="art-row-media issue-media">
+                <span>Sayı {issue.issue_number}</span>
+              </div>
+              <div className="art-row-body">
+                <div className="kicker">{formatIssueDate(issue.publish_date)}</div>
+                <h3>{issue.title}</h3>
+                {issue.description ? <p>{issue.description}</p> : null}
+              </div>
             </Link>
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

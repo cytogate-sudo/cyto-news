@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Issue } from "@/lib/gazete";
 import type { MastheadSettings } from "@/lib/settings";
 
@@ -22,7 +23,9 @@ export function Masthead({
         <span className="kicker">{masthead.eyebrow}</span>
         <span className="dot" />
       </div>
-      <h1 className="masthead-title">{masthead.title}</h1>
+      <h1 className="masthead-title">
+        <Link href="/">{masthead.title}</Link>
+      </h1>
       <div className="masthead-sub">{masthead.subtitle}</div>
       <div className="masthead-meta">
         {issue ? (

@@ -13,6 +13,7 @@ const FIELDS: { key: keyof ThemeSettings; label: string }[] = [
   { key: "bordo_deep", label: "Koyu Vurgu" },
   { key: "gold", label: "Altın Detay" },
   { key: "muted", label: "Soluk Metin" },
+  { key: "team_card", label: "Takım Kartı Zemini" },
 ];
 
 export function ThemeForm({ current }: { current: ThemeSettings }) {
