@@ -2,10 +2,24 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getSiteSettings, themeCssVariables } from "@/lib/settings";
 
+const SITE_URL = "https://cyto-news.vercel.app";
+const SITE_DESCRIPTION =
+  "GTÜ CytoGate Biyoteknolojik Araştırmalar Öğrenci Topluluğu'nun dijital bilim gazetesi.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Cytogate — Bilim Gazetesi",
-  description:
-    "GTÜ CytoGate Biyoteknolojik Araştırmalar Öğrenci Topluluğu'nun dijital bilim gazetesi.",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    siteName: "Cytogate Bilim Gazetesi",
+    locale: "tr_TR",
+    type: "website",
+    title: "Cytogate — Bilim Gazetesi",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default async function RootLayout({

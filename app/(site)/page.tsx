@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Masthead } from "@/components/Masthead";
 import { LeadStory } from "@/components/LeadStory";
 import { IssueSections } from "@/components/IssueSections";
@@ -41,6 +42,12 @@ export default async function HomePage() {
         categories={categories}
         issueNumber={issue.issue_number}
       />
+
+      <div className="archive-cta">
+        <Link href="/sayilar" className="read-link">
+          Tüm sayıları gör <span className="arrow">→</span>
+        </Link>
+      </div>
     </>
   );
 }

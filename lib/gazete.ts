@@ -168,6 +168,82 @@ export async function getArticleBySlug(
   return data as unknown as Article | null;
 }
 
+/** Sitemap için: yayındaki tüm yazılar, ait oldukları sayı numarasıyla. */
+export async function getAllPublishedArticles(): Promise<Article[]> {
+  const supabase = createSupabaseServerClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*, issue:issues!inner(issue_number, title, publish_date)")
+    .eq("status", "published")
+    .eq("issue.status", "published")
+    .order("published_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data as unknown as Article[]) ?? [];
+}
+
+/** Aynı köşeden başka yazılar (yazının kendisi hariç). */
+export async function getRelatedArticles(
+  categoryId: string | null,
+  excludeArticleId: string,
+  limit = 3
+): Promise<Article[]> {
+  const supabase = createSupabaseServerClient();
+  if (!supabase || !categoryId) return [];
+
+  const { data, error } = await supabase
+    .from("articles")
+    .select(`${ARTICLE_SUMMARY_COLUMNS}, issue:issues!inner(issue_number, title, publish_date)`)
+    .eq("status", "published")
+    .eq("category_id", categoryId)
+    .neq("id", excludeArticleId)
+    .order("published_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(error.message);
+  return (data as unknown as Article[]) ?? [];
+}
+
+/** Aynı sayı içinde sort_order'a göre önceki ve sonraki yazı. */
+export async function getAdjacentArticles(
+  issueId: string,
+  sortOrder: number
+): Promise<{ previous: Article | null; next: Article | null }> {
+  const supabase = createSupabaseServerClient();
+  if (!supabase) return { previous: null, next: null };
+
+  const [prevResult, nextResult] = await Promise.all([
+    supabase
+      .from("articles")
+      .select(ARTICLE_SUMMARY_COLUMNS)
+      .eq("issue_id", issueId)
+      .eq("status", "published")
+      .lt("sort_order", sortOrder)
+      .order("sort_order", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("articles")
+      .select(ARTICLE_SUMMARY_COLUMNS)
+      .eq("issue_id", issueId)
+      .eq("status", "published")
+      .gt("sort_order", sortOrder)
+      .order("sort_order", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  if (prevResult.error) throw new Error(prevResult.error.message);
+  if (nextResult.error) throw new Error(nextResult.error.message);
+
+  return {
+    previous: (prevResult.data as unknown as Article) ?? null,
+    next: (nextResult.data as unknown as Article) ?? null,
+  };
+}
+
 export async function getArticlesByCategorySlug(categorySlug: string): Promise<Article[]> {
   const supabase = createSupabaseServerClient();
   if (!supabase) return [];

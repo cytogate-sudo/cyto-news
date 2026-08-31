@@ -67,6 +67,64 @@ a {
   text-decoration: none;
 }
 
+/* Metin seçimi tema rengiyle uyumlu olsun */
+::selection {
+  background: color-mix(in srgb, var(--gold) 38%, transparent);
+  color: var(--ink);
+}
+
+/* ---------- Okuma ilerleme çubuğu ---------- */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 50;
+  pointer-events: none;
+}
+.reading-progress-fill {
+  height: 100%;
+  background: var(--bordo);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* ---------- Başa dön düğmesi ---------- */
+.scroll-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper-card);
+  color: var(--bordo);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 45;
+  box-shadow: var(--media-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 0.18s,
+    transform 0.18s,
+    visibility 0.18s;
+}
+.scroll-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.scroll-top:hover {
+  background: var(--bordo);
+  color: var(--paper-card);
+  border-color: var(--bordo);
+}
+
 /* ---------- Kicker / eyebrow label ---------- */
 .kicker {
   font-family: var(--font-label), sans-serif;
@@ -693,6 +751,115 @@ a {
 }
 .footer-base a:hover {
   color: var(--bordo);
+}
+
+/* ---------- Ana sayfa arşiv bağlantısı ---------- */
+.archive-cta {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Yazı sonu: paylaş / önceki-sonraki / ilgili ---------- */
+.share-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px 0 4px;
+}
+.share-label {
+  font-family: var(--font-label), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-right: 4px;
+}
+.share-btn {
+  font-family: var(--font-label), sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background 0.15s;
+}
+.share-btn:hover {
+  border-color: var(--bordo);
+  color: var(--bordo);
+  background: color-mix(in srgb, var(--bordo) 7%, transparent);
+}
+
+.adjacent-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 640px) {
+  .adjacent-nav {
+    grid-template-columns: 1fr;
+  }
+}
+.adjacent-link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper-card);
+  transition:
+    border-color 0.15s,
+    transform 0.15s;
+}
+.adjacent-link.is-next {
+  text-align: right;
+  align-items: flex-end;
+}
+.adjacent-link:hover {
+  border-color: var(--bordo);
+  transform: translateY(-1px);
+}
+.adjacent-title {
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.adjacent-link:hover .adjacent-title {
+  color: var(--bordo);
+}
+
+.related-block {
+  margin-top: 34px;
+}
+/* Bölüm listeleri normalde 1180px genişlikte; makale içinde 760px'lik
+   kabuğa uyması için genişlik ve iç boşluk sıfırlanır. */
+.article-shell .section-title,
+.article-shell .art-rows {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.article-shell .section-title {
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 
 /* ================= ARTICLE VIEW ================= */
