@@ -6,6 +6,10 @@ import { usePathname } from "next/navigation";
 import type { Category } from "@/lib/gazete";
 import type { MastheadSettings } from "@/lib/settings";
 
+type MenuItem =
+  | { kind: "label"; text: string }
+  | { kind: "link"; href: string; text: string };
+
 export function TopBar({
   categories,
   masthead,
@@ -28,12 +32,25 @@ export function TopBar({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const items: MenuItem[] = [
+    { kind: "label", text: "Köşeler" },
+    ...categories.map((c) => ({
+      kind: "link" as const,
+      href: `/kategori/${c.slug}`,
+      text: c.name,
+    })),
+    { kind: "label", text: "Gazete" },
+    { kind: "link", href: "/", text: "Ana Sayfa" },
+    { kind: "link", href: "/sayilar", text: "Tüm Sayılar" },
+    { kind: "link", href: "/hakkinda", text: "Hakkında" },
+  ];
+
   return (
     <div className="topbar-wrap">
       <div className="topbar">
         <button
           type="button"
-          className="topbar-trigger"
+          className={open ? "topbar-trigger is-open" : "topbar-trigger"}
           aria-expanded={open}
           aria-controls="kategori-menu"
           onClick={() => setOpen((v) => !v)}
@@ -59,23 +76,27 @@ export function TopBar({
             aria-label="Menüyü kapat"
             onClick={() => setOpen(false)}
           />
-          <div className="topbar-menu" id="kategori-menu">
-            <div className="topbar-menu-inner">
-              <div className="topbar-menu-col">
-                <div className="topbar-menu-label">Köşeler</div>
-                {categories.map((category) => (
-                  <Link key={category.id} href={`/kategori/${category.slug}`}>
-                    {category.name}
+          <div className="topbar-menu-anchor">
+            <nav className="topbar-menu" id="kategori-menu">
+              {items.map((item, index) => {
+                // Maddeler sırayla kayarak görünsün
+                const style = { animationDelay: `${index * 26}ms` };
+                return item.kind === "label" ? (
+                  <div key={`l-${item.text}`} className="topbar-menu-label" style={style}>
+                    {item.text}
+                  </div>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="topbar-menu-item"
+                    style={style}
+                  >
+                    {item.text}
                   </Link>
-                ))}
-              </div>
-              <div className="topbar-menu-col">
-                <div className="topbar-menu-label">Gazete</div>
-                <Link href="/">Ana Sayfa</Link>
-                <Link href="/sayilar">Tüm Sayılar</Link>
-                <Link href="/hakkinda">Hakkında</Link>
-              </div>
-            </div>
+                );
+              })}
+            </nav>
           </div>
         </>
       ) : null}
