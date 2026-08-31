@@ -172,7 +172,9 @@ a {
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
   padding: 4px 0 8px;
   transform-origin: top left;
-  animation: menu-open 170ms ease-out both;
+  /* "backwards" (both değil): animasyon hiç çalışmazsa panel kendi
+     görünür stilinde kalır, boş/şeffaf takılı kalmaz. */
+  animation: menu-open 170ms ease-out backwards;
 }
 @keyframes menu-open {
   from {
@@ -186,7 +188,7 @@ a {
 }
 .topbar-menu-label,
 .topbar-menu-item {
-  animation: menu-item-in 220ms ease-out both;
+  animation: menu-item-in 220ms ease-out backwards;
 }
 @keyframes menu-item-in {
   from {
