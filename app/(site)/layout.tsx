@@ -13,7 +13,7 @@ export default async function SiteLayout({
       <TopBar categories={categories} masthead={settings.masthead} />
       <hr className="hairline" />
       <div className="flex-1">{children}</div>
-      <SiteFooter masthead={settings.masthead} categories={categories} />
+      <SiteFooter masthead={settings.masthead} />
     </>
   );
 }
