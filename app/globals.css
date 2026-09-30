@@ -166,6 +166,57 @@ a {
 .topbar a:hover {
   color: var(--bordo);
 }
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+  flex: none;
+}
+/* Logo PNG'si maske olarak kullanılır, dolgusu tema renginden gelir:
+   dosya hiç değiştirilmeden tema değişimlerine uyar. */
+.topbar-logo {
+  display: block;
+  flex: none;
+  width: 39px;
+  height: 31px;
+  background-color: var(--bordo);
+  -webkit-mask-image: url("/logo.png");
+  mask-image: url("/logo.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: background-color 0.15s;
+}
+.topbar-logo:hover {
+  background-color: var(--bordo-deep);
+}
+@media (max-width: 640px) {
+  .topbar-logo {
+    width: 33px;
+    height: 26px;
+  }
+  .topbar-left {
+    gap: 10px;
+  }
+}
+/* Maske desteklenmezse logo kendi renkleriyle görünür (boş kutu kalmaz) */
+@supports not (mask-image: url("/logo.png")) {
+  .topbar-logo {
+    background-color: transparent;
+    background-image: url("/logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
 .topbar-trigger {
   display: inline-flex;
   align-items: center;
@@ -363,6 +414,11 @@ a {
   .lead-wrap {
     grid-template-columns: 1fr;
   }
+}
+/* Kapak görseli olmayan manşet: metin tek sütun halinde yayılır */
+.lead-wrap.no-media {
+  grid-template-columns: 1fr;
+  max-width: 900px;
 }
 .lead-media {
   position: relative;

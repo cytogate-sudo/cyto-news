@@ -8,6 +8,7 @@ import {
   saveMastheadAction,
 } from "@/app/admin/actions";
 import { ThemeForm } from "@/components/admin/ThemeForm";
+import { AboutForm } from "@/components/admin/AboutForm";
 import { PasswordForm } from "@/components/admin/PasswordForm";
 import { ConfirmSubmit } from "@/components/admin/ConfirmSubmit";
 
@@ -109,6 +110,11 @@ export default async function AdminSettingsPage({
             Kimliği Kaydet
           </button>
         </form>
+      </div>
+
+      <div className="admin-card">
+        <h2>Hakkında Sayfası</h2>
+        <AboutForm current={settings.about} />
       </div>
 
       <div className="admin-card">

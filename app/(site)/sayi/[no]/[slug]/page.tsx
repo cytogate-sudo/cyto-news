@@ -62,8 +62,13 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
         <div className="article-kicker">{article.kicker ?? article.category?.name}</div>
         <h1 className="article-title">{article.title}</h1>
         <div className="article-meta">
-          {article.author_name ? <span>{article.author_name}</span> : null}
-          <span>·</span>
+          {/* Yazar yoksa ayraç da yazılmasın (başta öksüz "·" kalmasın) */}
+          {article.author_name ? (
+            <>
+              <span>{article.author_name}</span>
+              <span>·</span>
+            </>
+          ) : null}
           <span>Sayı {no}</span>
           {article.reading_minutes ? (
             <>
@@ -73,11 +78,12 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
           ) : null}
         </div>
 
-        <div
-          className="article-hero"
-          style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
-        >
-          {article.cover_image_url ? (
+        {/* Kapak görseli isteğe bağlı — yoksa başlıktan doğrudan metne geçilir */}
+        {article.cover_image_url ? (
+          <div
+            className="article-hero"
+            style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
+          >
             <Image
               src={article.cover_image_url}
               alt={article.title}
@@ -88,10 +94,8 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               }}
               sizes="760px"
             />
-          ) : (
-            <span>Kapak Görseli</span>
-          )}
-        </div>
+          </div>
+        ) : null}
 
         <ArticleBody
           content={article.content}

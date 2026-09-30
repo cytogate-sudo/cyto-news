@@ -48,20 +48,27 @@ export function TopBar({
   return (
     <div className="topbar-wrap">
       <div className="topbar">
-        <button
-          type="button"
-          className={open ? "topbar-trigger is-open" : "topbar-trigger"}
-          aria-expanded={open}
-          aria-controls="kategori-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="burger" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </span>
-          Kategoriler
-        </button>
+        <div className="topbar-left">
+          {/* Logo, şekli maske olarak kullanılıp tema rengiyle boyanır —
+              böylece tema değişince logo da uyum sağlar. Aynı zamanda
+              her sayfadan ana sayfaya dönüş bağlantısı. */}
+          <Link href="/" className="topbar-logo" aria-label="Ana sayfa" />
+          <span className="topbar-sep" aria-hidden="true" />
+          <button
+            type="button"
+            className={open ? "topbar-trigger is-open" : "topbar-trigger"}
+            aria-expanded={open}
+            aria-controls="kategori-menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="burger" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+            Kategoriler
+          </button>
+        </div>
 
         <a href={masthead.instagram_url} target="_blank" rel="noopener noreferrer">
           {masthead.instagram_handle}

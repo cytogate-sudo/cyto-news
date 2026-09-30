@@ -213,7 +213,11 @@ export function ArticleEditor({
         </div>
 
         <div className="admin-card">
-          <h2>Kapak Görseli</h2>
+          <h2>Kapak Görseli (isteğe bağlı)</h2>
+          <p className="admin-note" style={{ marginTop: -6, marginBottom: 12 }}>
+            Görsel eklemek zorunlu değil. Boş bırakırsan yazı sitede görselsiz yayınlanır;
+            boş bir çerçeve görünmez, metin doğrudan başlığın altından başlar.
+          </p>
           <ImageUploadField
             folder={`articles/${slug || article.id}`}
             defaultUrl={coverUrl}
@@ -365,12 +369,13 @@ export function ArticleEditor({
             </>
           ) : null}
         </div>
-        <div
-          className="article-hero"
-          style={{ aspectRatio: coverAspectRatio(coverAspect) }}
-        >
-          {coverUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+        {/* Sitedeki davranışın aynısı: görsel yoksa çerçeve de yok */}
+        {coverUrl ? (
+          <div
+            className="article-hero"
+            style={{ aspectRatio: coverAspectRatio(coverAspect) }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={coverUrl}
               alt={title}
@@ -383,10 +388,8 @@ export function ArticleEditor({
                 objectPosition: coverObjectPosition(coverPosition),
               }}
             />
-          ) : (
-            <span>Kapak Görseli</span>
-          )}
-        </div>
+          </div>
+        ) : null}
         <ArticleBody
           content={content || "*Metin buraya gelecek...*"}
           pullQuote={pullQuote || null}

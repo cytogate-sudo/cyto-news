@@ -22,9 +22,26 @@ export type MastheadSettings = {
   instagram_url: string;
 };
 
+/** Hakkında sayfasındaki Misyon/Vizyon gibi çerçeveli kutular */
+export type AboutHighlight = {
+  title: string;
+  text: string;
+};
+
+export type AboutSettings = {
+  kicker: string;
+  title: string;
+  /** Kutuların üstünde kalan metin (Markdown) */
+  intro: string;
+  highlights: AboutHighlight[];
+  /** Kutuların altında kalan metin (Markdown) */
+  outro: string;
+};
+
 export type SiteSettings = {
   theme: ThemeSettings;
   masthead: MastheadSettings;
+  about: AboutSettings;
 };
 
 export const DEFAULT_THEME: ThemeSettings = {
@@ -95,9 +112,30 @@ export const DEFAULT_MASTHEAD: MastheadSettings = {
   instagram_url: "https://www.instagram.com/gtucytogate",
 };
 
+// Panelden hiç kaydedilmediyse gösterilecek metin — sayfanın ilk halidir.
+export const DEFAULT_ABOUT: AboutSettings = {
+  kicker: "Kulüp Hakkında",
+  title: "GTÜ CytoGate Biyoteknolojik Araştırmalar Öğrenci Topluluğu",
+  intro:
+    "GTÜ CytoGate, Gebze Teknik Üniversitesi bünyesinde faaliyet gösteren bir biyoteknolojik araştırmalar öğrenci topluluğudur. Yönetim Kurulu; Sosyal Medya ve Tasarım/Yayın, Finans, Takım ve Organizasyon Koordinatörlükleri altında yapılanmıştır. Kulüp; bilimsel makale tartışmalarından proje takımlarına, sektör buluşmalarından yarışma katılımlarına kadar geniş bir yelpazede öğrenci odaklı faaliyet yürütür.",
+  highlights: [
+    {
+      title: "Misyon",
+      text: "Biyoteknolojiyle ilgilenen öğrencileri bir araya getirerek onları bilimsel üretim yapan, gerçek projeler geliştiren ve disiplinler arası ekiplerde çalışabilen bireylere dönüştürmek.",
+    },
+    {
+      title: "Vizyon",
+      text: "Yalnızca kendi bölümüyle sınırlı kalmayan; GTÜ'nün tamamına açık, aynı zamanda diğer üniversitelerin öğrenci topluluklarıyla ve sektörün öncü biyoteknoloji kuruluşlarıyla köprü kuran, Türkiye'nin biyoteknoloji ekosisteminde tanınan bir öğrenci topluluğu olmak.",
+    },
+  ],
+  outro:
+    "Kulüp, düzenli olarak **Paper Club** tartışmaları, **Biyo Panel** serisi, **Biyogirişimcilik Konferansı** ve TEKNOFEST hazırlık süreçleri gibi etkinlikler düzenler; GOGEC 2026'da CytoCyst takımının kazandığı gümüş madalya gibi somut başarılara imza atar.\n\nBu gazete, kulübün bilimsel üretimini ve etkinliklerini düzenli olarak okuyucuyla buluşturmak için hazırlanıyor.",
+};
+
 export const DEFAULT_SETTINGS: SiteSettings = {
   theme: DEFAULT_THEME,
   masthead: DEFAULT_MASTHEAD,
+  about: DEFAULT_ABOUT,
 };
 
 /**
@@ -112,9 +150,15 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   if (error || !data) return DEFAULT_SETTINGS;
 
   const map = Object.fromEntries(data.map((row) => [row.key, row.value]));
+  const about = { ...DEFAULT_ABOUT, ...(map.about ?? {}) };
   return {
     theme: { ...DEFAULT_THEME, ...(map.theme ?? {}) },
     masthead: { ...DEFAULT_MASTHEAD, ...(map.masthead ?? {}) },
+    // Kutular silinip boş kaydedilmiş olabilir; dizi değilse varsayılana dön
+    about: {
+      ...about,
+      highlights: Array.isArray(about.highlights) ? about.highlights : DEFAULT_ABOUT.highlights,
+    },
   };
 }
 

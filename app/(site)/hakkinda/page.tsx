@@ -1,55 +1,35 @@
 import type { Metadata } from "next";
+import ReactMarkdown from "react-markdown";
+import { getSiteSettings } from "@/lib/settings";
 
-export const metadata: Metadata = {
-  title: "Kulüp Hakkında — Cytogate Bilim Gazetesi",
-};
+export const revalidate = 3600;
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const { about } = await getSiteSettings();
+  return { title: `${about.kicker} — Cytogate Bilim Gazetesi` };
+}
+
+export default async function AboutPage() {
+  const { about } = await getSiteSettings();
+
   return (
     <div className="article-shell">
-      <div className="article-kicker">Kulüp Hakkında</div>
-      <h1 className="article-title">GTÜ CytoGate Biyoteknolojik Araştırmalar Öğrenci Topluluğu</h1>
+      <div className="article-kicker">{about.kicker}</div>
+      <h1 className="article-title">{about.title}</h1>
 
+      {/* Tek bir .article-body içinde: giriş metni → kutular → devam metni.
+          Böylece ilk paragrafın drop-cap'i yalnızca bir kez uygulanır. */}
       <div className="article-body" style={{ marginTop: 28 }}>
-        <p>
-          GTÜ CytoGate, Gebze Teknik Üniversitesi bünyesinde faaliyet gösteren bir
-          biyoteknolojik araştırmalar öğrenci topluluğudur. Yönetim Kurulu; Sosyal Medya ve
-          Tasarım/Yayın, Finans, Takım ve Organizasyon Koordinatörlükleri altında
-          yapılanmıştır. Kulüp; bilimsel makale tartışmalarından proje takımlarına, sektör
-          buluşmalarından yarışma katılımlarına kadar geniş bir yelpazede öğrenci odaklı
-          faaliyet yürütür.
-        </p>
+        {about.intro ? <ReactMarkdown>{about.intro}</ReactMarkdown> : null}
 
-        <div className="term-box">
-          <div className="kicker">Misyon</div>
-          <p style={{ margin: 0 }}>
-            Biyoteknolojiyle ilgilenen öğrencileri bir araya getirerek onları bilimsel üretim
-            yapan, gerçek projeler geliştiren ve disiplinler arası ekiplerde çalışabilen
-            bireylere dönüştürmek.
-          </p>
-        </div>
+        {about.highlights.map((highlight, index) => (
+          <div className="term-box" key={`${highlight.title}-${index}`}>
+            <div className="kicker">{highlight.title}</div>
+            <p style={{ margin: 0 }}>{highlight.text}</p>
+          </div>
+        ))}
 
-        <div className="term-box">
-          <div className="kicker">Vizyon</div>
-          <p style={{ margin: 0 }}>
-            Yalnızca kendi bölümüyle sınırlı kalmayan; GTÜ&apos;nün tamamına açık, aynı zamanda
-            diğer üniversitelerin öğrenci topluluklarıyla ve sektörün öncü biyoteknoloji
-            kuruluşlarıyla köprü kuran, Türkiye&apos;nin biyoteknoloji ekosisteminde tanınan bir
-            öğrenci topluluğu olmak.
-          </p>
-        </div>
-
-        <p>
-          Kulüp, düzenli olarak <strong>Paper Club</strong> tartışmaları, <strong>Biyo
-          Panel</strong> serisi, <strong>Biyogirişimcilik Konferansı</strong> ve TEKNOFEST
-          hazırlık süreçleri gibi etkinlikler düzenler; GOGEC 2026&apos;da CytoCyst takımının
-          kazandığı gümüş madalya gibi somut başarılara imza atar.
-        </p>
-
-        <p>
-          Bu gazete, kulübün bilimsel üretimini ve etkinliklerini düzenli olarak okuyucuyla
-          buluşturmak için hazırlanıyor.
-        </p>
+        {about.outro ? <ReactMarkdown>{about.outro}</ReactMarkdown> : null}
       </div>
     </div>
   );

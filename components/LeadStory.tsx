@@ -14,15 +14,19 @@ export function LeadStory({
   article: Article;
   issueNumber: Issue["issue_number"];
 }) {
+  // Kapak görseli isteğe bağlı: yoksa boş bir yer tutucu kutu göstermek
+  // yerine manşet metni tüm genişliğe yayılır.
+  const hasCover = Boolean(article.cover_image_url);
+
   return (
-    <div className="lead-wrap">
-      <div
-        className="lead-media"
-        style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
-      >
-        {article.cover_image_url ? (
+    <div className={hasCover ? "lead-wrap" : "lead-wrap no-media"}>
+      {hasCover ? (
+        <div
+          className="lead-media"
+          style={{ aspectRatio: coverAspectRatio(article.cover_aspect) }}
+        >
           <Image
-            src={article.cover_image_url}
+            src={article.cover_image_url as string}
             alt={article.title}
             fill
             style={{
@@ -31,10 +35,8 @@ export function LeadStory({
             }}
             sizes="(max-width: 860px) 100vw, 50vw"
           />
-        ) : (
-          <span>Kapak Görseli</span>
-        )}
-      </div>
+        </div>
+      ) : null}
       <div>
         <div className="kicker">{article.kicker ?? article.category?.name}</div>
         <h2 className="lead-headline">{article.title}</h2>

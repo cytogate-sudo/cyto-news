@@ -13,7 +13,7 @@ import {
   verifyCredentials,
   verifyPassword,
 } from "@/lib/admin/auth";
-import type { MastheadSettings, ThemeSettings } from "@/lib/settings";
+import type { AboutSettings, MastheadSettings, ThemeSettings } from "@/lib/settings";
 
 function supabaseOrThrow() {
   const supabase = createSupabaseServerClient();
@@ -407,6 +407,26 @@ export async function saveThemeAction(formData: FormData): Promise<void> {
   await upsertSetting("theme", theme);
   revalidateSite();
   redirect("/admin/ayarlar?kayit=ok");
+}
+
+export async function saveAboutAction(
+  payload: AboutSettings
+): Promise<{ error?: string; success?: string }> {
+  await requireAdmin();
+
+  if (!payload.title.trim()) return { error: "Sayfa başlığı boş olamaz." };
+
+  await upsertSetting("about", {
+    kicker: payload.kicker.trim(),
+    title: payload.title.trim(),
+    intro: payload.intro,
+    // Başlığı ve metni boş kalan kutular kaydedilmez
+    highlights: payload.highlights.filter((h) => h.title.trim() && h.text.trim()),
+    outro: payload.outro,
+  } satisfies AboutSettings);
+
+  revalidateSite();
+  return { success: "Hakkında sayfası güncellendi." };
 }
 
 export async function saveMastheadAction(formData: FormData): Promise<void> {
