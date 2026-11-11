@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# yedekler (yerel kalsin, depoya gitmesin)
+/yedekler

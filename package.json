@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "publish-issue": "tsx --env-file=.env.local scripts/publish-issue.ts"
+    "publish-issue": "tsx --env-file=.env.local scripts/publish-issue.ts",
+    "yedekle": "tsx --env-file=.env.local scripts/yedekle.ts",
+    "geri-yukle": "tsx --env-file=.env.local scripts/geri-yukle.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
     "gray-matter": "^4.0.3",
+    "jszip": "^3.10.2",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
