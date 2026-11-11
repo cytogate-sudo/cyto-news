@@ -10,6 +10,7 @@ import {
 import { ThemeForm } from "@/components/admin/ThemeForm";
 import { AboutForm } from "@/components/admin/AboutForm";
 import { PasswordForm } from "@/components/admin/PasswordForm";
+import { BackupPanel } from "@/components/admin/BackupPanel";
 import { ConfirmSubmit } from "@/components/admin/ConfirmSubmit";
 
 export default async function AdminSettingsPage({
@@ -164,6 +165,11 @@ export default async function AdminSettingsPage({
           Kategori adını değiştirmek adresi (slug) değiştirmez — eski linkler çalışmaya devam
           eder.
         </p>
+      </div>
+
+      <div className="admin-card">
+        <h2>Yedekleme</h2>
+        <BackupPanel />
       </div>
 
       <div className="admin-card">

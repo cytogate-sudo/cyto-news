@@ -14,6 +14,7 @@ import {
   verifyPassword,
 } from "@/lib/admin/auth";
 import type { AboutSettings, MastheadSettings, ThemeSettings } from "@/lib/settings";
+import { yedekGeriYukle, type GeriYuklemeRaporu } from "@/lib/admin/yedek";
 
 function supabaseOrThrow() {
   const supabase = createSupabaseServerClient();
@@ -445,4 +446,72 @@ export async function saveMastheadAction(formData: FormData): Promise<void> {
   await upsertSetting("masthead", masthead);
   revalidateSite();
   redirect("/admin/ayarlar?kayit=ok");
+}
+
+// ---------- Yedekleme ----------
+
+export type YedekOnizleme = {
+  alindi: string | null;
+  gorsellerDahil: boolean;
+  sayilar: { eskiNumara: number; yeniNumara: number; yaziSayisi: number }[];
+  eklenenKategoriler: string[];
+  toplamYazi: number;
+  gorselDuruyor: number;
+  gorselYuklenen: number;
+  ayarVar: boolean;
+  uyarilar: string[];
+};
+
+/** Dosyayı okur ama HİÇBİR ŞEY YAZMAZ — yalnızca ne olacağını döner. */
+export async function inspectBackupAction(
+  formData: FormData
+): Promise<{ error?: string; onizleme?: YedekOnizleme }> {
+  await requireAdmin();
+  const dosya = formData.get("dosya");
+  if (!(dosya instanceof File) || dosya.size === 0) return { error: "Dosya seçilmedi." };
+
+  try {
+    const rapor = await yedekGeriYukle(Buffer.from(await dosya.arrayBuffer()), {
+      deneme: true,
+    });
+    return { onizleme: raporuOnizlemeyeCevir(rapor) };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Dosya okunamadı." };
+  }
+}
+
+/** Yedeği gerçekten yükler. Üzerine yazmaz: her sayı TASLAK olarak eklenir. */
+export async function restoreBackupAction(
+  formData: FormData
+): Promise<{ error?: string; onizleme?: YedekOnizleme; success?: string }> {
+  await requireAdmin();
+  const dosya = formData.get("dosya");
+  if (!(dosya instanceof File) || dosya.size === 0) return { error: "Dosya seçilmedi." };
+
+  try {
+    const rapor = await yedekGeriYukle(Buffer.from(await dosya.arrayBuffer()), {
+      deneme: false,
+    });
+    revalidateSite();
+    return {
+      onizleme: raporuOnizlemeyeCevir(rapor),
+      success: `${rapor.sayilar.length} sayı, ${rapor.yazilanYazi} yazı taslak olarak eklendi.`,
+    };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Geri yükleme başarısız." };
+  }
+}
+
+function raporuOnizlemeyeCevir(rapor: GeriYuklemeRaporu): YedekOnizleme {
+  return {
+    alindi: rapor.alindi,
+    gorsellerDahil: rapor.gorsellerDahil,
+    sayilar: rapor.sayilar,
+    eklenenKategoriler: rapor.eklenenKategoriler,
+    toplamYazi: rapor.yazilanYazi,
+    gorselDuruyor: rapor.gorselDuruyor,
+    gorselYuklenen: rapor.gorselYuklenen,
+    ayarVar: rapor.ayarVar,
+    uyarilar: rapor.uyarilar,
+  };
 }

@@ -374,3 +374,38 @@
   align-items: center;
   z-index: 10;
 }
+
+/* ---------- Yedekleme kartı ---------- */
+.yedek-baslik {
+  font-family: var(--font-display), serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.yedek-butonlar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 12px 0 4px;
+}
+.yedek-ozet {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bordo);
+  background: var(--paper);
+  padding: 14px 16px;
+}
+.yedek-liste {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.yedek-liste li {
+  margin-bottom: 4px;
+}
+.yedek-liste.uyari {
+  margin-top: 10px;
+  color: var(--bordo);
+}
