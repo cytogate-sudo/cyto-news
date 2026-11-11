@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllIssues } from "@/lib/gazete";
 
@@ -34,9 +35,26 @@ export default async function IssuesPage() {
         <div className="art-rows">
           {issues.map((issue) => (
             <Link key={issue.id} href={`/sayi/${issue.issue_number}`} className="art-row">
-              <div className="art-row-media issue-media">
-                <span>Sayı {issue.issue_number}</span>
-              </div>
+              {/* Kapak yüklenmişse o görünür; yoksa "Sayı N" yazan desenli kutu */}
+              {issue.cover_image_url ? (
+                <div className="art-row-media issue-cover">
+                  {/* Kapak bir tasarım; kırpmak yerine tamamı görünsün diye
+                      "contain" — geniş de dikey de olsa çerçeveye sığar.
+                      Hiçbir yeri kırpılmadığı için kadraj ayarı uygulanmıyor,
+                      görsel çerçeveye ortalanıyor. */}
+                  <Image
+                    src={issue.cover_image_url}
+                    alt={`${issue.title} kapağı`}
+                    fill
+                    sizes="150px"
+                    style={{ objectFit: "contain" }}
+                  />
+                </div>
+              ) : (
+                <div className="art-row-media issue-media">
+                  <span>Sayı {issue.issue_number}</span>
+                </div>
+              )}
               <div className="art-row-body">
                 <div className="kicker">{formatIssueDate(issue.publish_date)}</div>
                 <h3>{issue.title}</h3>

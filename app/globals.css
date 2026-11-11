@@ -578,6 +578,11 @@ a {
     linear-gradient(135deg, rgba(122, 43, 40, 0.12), rgba(169, 130, 46, 0.12)),
     repeating-linear-gradient(45deg, rgba(36, 28, 20, 0.05) 0 2px, transparent 2px 14px);
 }
+/* Sayı kapağı tam görünsün diye desenli zemin yerine düz kağıt zemin */
+.art-row-media.issue-cover {
+  background: var(--paper-card);
+  padding: 6px;
+}
 .art-row-media.issue-media {
   display: flex;
   align-items: center;

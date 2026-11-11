@@ -15,6 +15,8 @@ export type Issue = {
   title: string;
   description: string | null;
   cover_image_url: string | null;
+  // Admin migration'ından geliyor; eski kayıtlarda olmayabilir.
+  cover_position?: string;
   publish_date: string;
   status: "draft" | "published";
 };
