@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllIssues, getAllPublishedArticles, getCategories } from "@/lib/gazete";
 
-const SITE_URL = "https://cyto-news.vercel.app";
+const SITE_URL = "https://cytogate.org";
 
 export const revalidate = 3600;
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getSiteSettings, themeCssVariables } from "@/lib/settings";
 
-const SITE_URL = "https://cyto-news.vercel.app";
+const SITE_URL = "https://cytogate.org";
 const SITE_DESCRIPTION =
   "GTÜ CytoGate Biyoteknolojik Araştırmalar Öğrenci Topluluğu'nun dijital bilim gazetesi.";
 
