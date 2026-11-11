@@ -5,7 +5,7 @@ export type ArticleSource = { label: string; url: string | null };
 // tamamen gizlenir — kapak görselindeki gibi boş bir çerçeve kalmaz.
 export function SourceList({
   sources,
-  title = "Kaynaklar",
+  title = "İlgili Çalışmalar",
 }: {
   sources?: ArticleSource[] | null;
   title?: string;

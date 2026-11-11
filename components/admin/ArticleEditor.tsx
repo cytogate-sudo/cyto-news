@@ -359,16 +359,16 @@ export function ArticleEditor({
         </div>
 
         <div className="admin-card">
-          <h2>Kaynaklar</h2>
+          <h2>İlgili Çalışmalar</h2>
           <p className="admin-note" style={{ marginTop: -6, marginBottom: 12 }}>
-            Yazının en altında numaralı bir kaynakça olarak görünür. Hiç kaynak eklemezsen
+            Yazının en altında numaralı bir liste olarak görünür. Hiç çalışma eklemezsen
             bölüm sitede hiç çıkmaz.
           </p>
           {sources.map((source, index) => (
             <div key={index} className="sources-editor-row">
               <input
                 className="af-input"
-                placeholder="Kaynağın adı (örn. Nature, 2025 — Makale başlığı)"
+                placeholder="Çalışmanın adı (örn. Nature, 2025 — Makale başlığı)"
                 value={source.label}
                 onChange={(e) => updateSource(index, { label: e.target.value })}
               />
@@ -394,11 +394,11 @@ export function ArticleEditor({
               className="btn small secondary"
               onClick={() => setSources([...sources, { label: "", url: "" }])}
             >
-              + Kaynak Ekle
+              + Çalışma Ekle
             </button>
           </div>
           <p className="admin-note">
-            Bağlantı girilirse kaynağın adı tıklanabilir olur ve yeni sekmede açılır;
+            Bağlantı girilirse çalışmanın adı tıklanabilir olur ve yeni sekmede açılır;
             girilmezse düz metin olarak listelenir.
           </p>
         </div>
