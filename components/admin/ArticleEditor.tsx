@@ -8,9 +8,13 @@ import {
 } from "@/app/admin/actions";
 import { coverAspectRatio, coverObjectPosition, type Article, type Category } from "@/lib/gazete";
 import { ArticleBody } from "@/components/ArticleBody";
+import { SourceList } from "@/components/SourceList";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 type Term = { term: string; definition: string };
+// Formda bağlantı kutusu boş bırakılabilsin diye url burada düz string;
+// kaydederken boş olanlar null'a çevriliyor.
+type SourceDraft = { label: string; url: string };
 
 export function ArticleEditor({
   article,
@@ -27,6 +31,9 @@ export function ArticleEditor({
   const [content, setContent] = useState(article.content);
   const [pullQuote, setPullQuote] = useState(article.pull_quote ?? "");
   const [terms, setTerms] = useState<Term[]>(article.terms ?? []);
+  const [sources, setSources] = useState<SourceDraft[]>(
+    (article.sources ?? []).map((source) => ({ label: source.label, url: source.url ?? "" }))
+  );
   const [authorName, setAuthorName] = useState(article.author_name ?? "");
   const [coverUrl, setCoverUrl] = useState<string | null>(article.cover_image_url);
   const [coverPosition, setCoverPosition] = useState(article.cover_position ?? "center");
@@ -43,6 +50,11 @@ export function ArticleEditor({
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const inlineFileRef = useRef<HTMLInputElement>(null);
 
+  // Hem kaydederken hem de önizlemede aynı temizlenmiş liste kullanılıyor
+  const cleanSources = sources
+    .map((source) => ({ label: source.label.trim(), url: source.url.trim() || null }))
+    .filter((source) => source.label);
+
   function save() {
     const payload: ArticlePayload = {
       title,
@@ -53,6 +65,7 @@ export function ArticleEditor({
       content,
       pull_quote: pullQuote || null,
       terms: terms.filter((t) => t.term.trim() && t.definition.trim()),
+      sources: cleanSources,
       author_name: authorName || null,
       cover_image_url: coverUrl,
       cover_position: coverPosition,
@@ -97,6 +110,10 @@ export function ArticleEditor({
 
   function updateTerm(index: number, patch: Partial<Term>) {
     setTerms(terms.map((t, i) => (i === index ? { ...t, ...patch } : t)));
+  }
+
+  function updateSource(index: number, patch: Partial<SourceDraft>) {
+    setSources(sources.map((s, i) => (i === index ? { ...s, ...patch } : s)));
   }
 
   return (
@@ -341,6 +358,51 @@ export function ArticleEditor({
           </div>
         </div>
 
+        <div className="admin-card">
+          <h2>Kaynaklar</h2>
+          <p className="admin-note" style={{ marginTop: -6, marginBottom: 12 }}>
+            Yazının en altında numaralı bir kaynakça olarak görünür. Hiç kaynak eklemezsen
+            bölüm sitede hiç çıkmaz.
+          </p>
+          {sources.map((source, index) => (
+            <div key={index} className="sources-editor-row">
+              <input
+                className="af-input"
+                placeholder="Kaynağın adı (örn. Nature, 2025 — Makale başlığı)"
+                value={source.label}
+                onChange={(e) => updateSource(index, { label: e.target.value })}
+              />
+              <input
+                className="af-input"
+                type="url"
+                placeholder="Bağlantı (isteğe bağlı)"
+                value={source.url}
+                onChange={(e) => updateSource(index, { url: e.target.value })}
+              />
+              <button
+                type="button"
+                className="btn small danger"
+                onClick={() => setSources(sources.filter((_, i) => i !== index))}
+              >
+                Sil
+              </button>
+            </div>
+          ))}
+          <div>
+            <button
+              type="button"
+              className="btn small secondary"
+              onClick={() => setSources([...sources, { label: "", url: "" }])}
+            >
+              + Kaynak Ekle
+            </button>
+          </div>
+          <p className="admin-note">
+            Bağlantı girilirse kaynağın adı tıklanabilir olur ve yeni sekmede açılır;
+            girilmezse düz metin olarak listelenir.
+          </p>
+        </div>
+
         <div className="savebar">
           <button type="button" className="btn" onClick={save} disabled={pending}>
             {pending ? "Kaydediliyor..." : "Kaydet"}
@@ -395,6 +457,7 @@ export function ArticleEditor({
           pullQuote={pullQuote || null}
           terms={terms.filter((t) => t.term.trim() && t.definition.trim())}
         />
+        <SourceList sources={cleanSources} />
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { ArticleBody } from "@/components/ArticleBody";
 import { ArticleRow } from "@/components/ArticleRow";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { ShareButtons } from "@/components/ShareButtons";
+import { SourceList } from "@/components/SourceList";
 import {
   coverAspectRatio,
   coverObjectPosition,
@@ -102,6 +103,8 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
           pullQuote={article.pull_quote}
           terms={article.terms}
         />
+
+        <SourceList sources={article.sources} />
 
         <hr className="hairline" style={{ marginTop: 40 }} />
         <ShareButtons title={article.title} />

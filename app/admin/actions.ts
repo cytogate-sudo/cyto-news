@@ -210,6 +210,7 @@ export type ArticlePayload = {
   content: string;
   pull_quote: string | null;
   terms: { term: string; definition: string }[] | null;
+  sources: { label: string; url: string | null }[] | null;
   author_name: string | null;
   cover_image_url: string | null;
   cover_position: string;
@@ -240,6 +241,7 @@ export async function saveArticleAction(
       content: payload.content,
       pull_quote: payload.pull_quote?.trim() || null,
       terms: payload.terms && payload.terms.length > 0 ? payload.terms : null,
+      sources: payload.sources && payload.sources.length > 0 ? payload.sources : null,
       author_name: payload.author_name?.trim() || null,
       cover_image_url: payload.cover_image_url || null,
       cover_position: payload.cover_position,

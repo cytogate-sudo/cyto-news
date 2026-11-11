@@ -30,6 +30,9 @@ export type Article = {
   content: string;
   pull_quote: string | null;
   terms: { term: string; definition: string }[] | null;
+  // Kaynakça migration'ı (supabase/migration-kaynaklar.sql) uygulanmadan önce
+  // bu alan sorgudan gelmeyebilir; SourceList boş listeyi zaten gizliyor.
+  sources?: { label: string; url: string | null }[] | null;
   author_name: string | null;
   cover_image_url: string | null;
   // Admin migration'ı uygulanmadan önce bu iki alan sorgudan gelmeyebilir;

@@ -356,6 +356,13 @@
   margin-bottom: 8px;
 }
 
+.sources-editor-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .savebar {
   position: sticky;
   bottom: 0;

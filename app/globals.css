@@ -1096,6 +1096,51 @@ a {
   font-size: 14px;
 }
 
+/* Yazı sonu kaynakçası — klasik gazete künyesi gibi çift çizgiyle ayrılır */
+.source-list {
+  margin-top: 44px;
+  padding-top: 18px;
+  /* 4px: tarayıcı çift çizgiyi 1px-2px-1px olarak çizsin — 3px'te tek
+     çizgiye yuvarlanıyor ve alttaki paylaş ayracından ayırt edilmiyor.
+     Renk --line değil: --line sabit koyu bir ton, Gece Baskısı temasında
+     kayboluyor. --ink temayla değiştiği için her iki temada da görünür. */
+  border-top: 4px double color-mix(in srgb, var(--ink) 30%, transparent);
+}
+.source-list .kicker {
+  margin-bottom: 12px;
+}
+.source-list ol {
+  margin: 0;
+  padding-left: 1.6em;
+  list-style: decimal;
+}
+.source-list li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 9px;
+  /* Çıplak bağlantılar uzun olabiliyor; dar ekranda taşmasın */
+  overflow-wrap: anywhere;
+}
+.source-list li:last-child {
+  margin-bottom: 0;
+}
+.source-list li::marker {
+  color: var(--bordo);
+  font-family: var(--font-label), sans-serif;
+  font-size: 12px;
+}
+.source-list a {
+  color: var(--bordo);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+.source-list a:hover {
+  color: var(--bordo-deep);
+  text-decoration-color: var(--bordo-deep);
+}
+
 .empty-state {
   max-width: 1180px;
   margin: 0 auto;
